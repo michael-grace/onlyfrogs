@@ -38,7 +38,7 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err) // TODO
 	}
-	jsonData, err := json.Marshal(post)
+	jsonData, err := json.Marshal(&PostWithScore{Post: *post, Score: m.OnlyFrogsSession.GetTotalScoreForPost(post.ID)})
 	if err != nil {
 		panic(err) // TODO
 	}
@@ -50,7 +50,7 @@ func GetAllPosts(w http.ResponseWriter, r *http.Request) {
 	allPosts := m.OnlyFrogsSession.GetPosts()
 	var allPostsScores []*PostWithScore
 	for _, val := range allPosts {
-		allPostsScores = append(allPostsScores, &PostWithScore{Post: *val, Score: val.GetScore()})
+		allPostsScores = append(allPostsScores, &PostWithScore{Post: *val, Score: m.OnlyFrogsSession.GetTotalScoreForPost(val.ID)})
 	}
 	jsonData, err := json.Marshal(allPostsScores)
 	if err != nil {

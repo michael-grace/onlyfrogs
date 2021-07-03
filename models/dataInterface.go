@@ -6,11 +6,13 @@ type Store interface {
 	Follow(followerID, followingID string)
 	Unfollow(followerID, followingID string)
 
-	GetScores() []*Score
 	GetPosts() []*Post
 	GetPostFromID(id string) (*Post, error)
-	GetFollowRecords() []FollowRecord
+	GetTotalScoreForPost(id string) int
+
 	GetUserByID(id string) (*User, error)
+	GetUserFollowing(id string) []*User
+	GetUserFollowers(id string) []*User
 }
 
 var OnlyFrogsSession Store

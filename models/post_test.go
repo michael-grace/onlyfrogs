@@ -26,8 +26,8 @@ func TestGetPostScore(t *testing.T) {
 		t.Errorf(err.Error())
 	}
 
-	if post.GetScore() != 2 {
-		t.Errorf("Expected Score 2, got score %v", post.GetScore())
+	if OnlyFrogsSession.GetTotalScoreForPost(post.ID) != 2 {
+		t.Errorf("Expected Score 2, got score %v", OnlyFrogsSession.GetTotalScoreForPost(post.ID))
 	}
 
 }
@@ -42,9 +42,9 @@ func TestChangePostScore(t *testing.T) {
 		t.Errorf(err.Error())
 	}
 
-	origScore := post.GetScore()
+	origScore := OnlyFrogsSession.GetTotalScoreForPost(post.ID)
 	OnlyFrogsSession.AddScore("1", "3", 5)
-	newScore := post.GetScore()
+	newScore := OnlyFrogsSession.GetTotalScoreForPost(post.ID)
 
 	if newScore != origScore+5 {
 		t.Errorf("Expected Score %v, got score %v", origScore+5, newScore)

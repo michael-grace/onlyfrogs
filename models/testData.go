@@ -13,10 +13,6 @@ type TestSuite struct {
 	FollowRecords []FollowRecord
 }
 
-func (t *TestSuite) GetScores() []*Score {
-	return t.Scores
-}
-
 func (t *TestSuite) GetPosts() []*Post {
 	return t.Posts
 }
@@ -30,8 +26,14 @@ func (t *TestSuite) GetPostFromID(id string) (*Post, error) {
 	return nil, fmt.Errorf("Post with ID %v not found", id)
 }
 
-func (t *TestSuite) GetFollowRecords() []FollowRecord {
-	return t.FollowRecords
+func (t *TestSuite) GetTotalScoreForPost(id string) int {
+	var totalScore int
+	for _, score := range t.Scores {
+		if score.PostID == id {
+			totalScore += score.Score
+		}
+	}
+	return totalScore
 }
 
 func (t *TestSuite) GetUserByID(id string) (*User, error) {
@@ -41,6 +43,34 @@ func (t *TestSuite) GetUserByID(id string) (*User, error) {
 		}
 	}
 	return nil, fmt.Errorf("User with ID %v not found", id)
+}
+
+func (t *TestSuite) GetUserFollowing(id string) []*User {
+	var following []*User
+	for _, record := range t.FollowRecords {
+		if record.FollowerID == id {
+			user, err := t.GetUserByID(record.FollowingID)
+			if err != nil {
+				panic(err) // TODO
+			}
+			following = append(following, user)
+		}
+	}
+	return following
+}
+
+func (t *TestSuite) GetUserFollowers(id string) []*User {
+	var followers []*User
+	for _, record := range t.FollowRecords {
+		if record.FollowingID == id {
+			user, err := t.GetUserByID(record.FollowerID)
+			if err != nil {
+				panic(err) // TODO
+			}
+			followers = append(followers, user)
+		}
+	}
+	return followers
 }
 
 func (t *TestSuite) AddScore(postID, userID string, score int) {
