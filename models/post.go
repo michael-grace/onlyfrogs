@@ -1,8 +1,18 @@
 package models
 
 type Post struct {
-	ID        int    `json:"id"`
+	ID        string `json:"id"`
 	Name      string `json:"name"`
 	PhotoPath string `json:"photo"`
-	UserID    int    `json:"userID"`
+	UserID    string `json:"userID"`
+}
+
+func (p Post) GetScore() int {
+	totalScore := 0
+	for _, score := range OnlyFrogsSession.GetScores() {
+		if score.PostID == p.ID {
+			totalScore += score.Score
+		}
+	}
+	return totalScore
 }

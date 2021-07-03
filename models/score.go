@@ -1,7 +1,7 @@
 package models
 
 type Score struct {
-	UserID int
-	PostID int
+	UserID string
+	PostID string
 	Score  int
 }
