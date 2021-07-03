@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -73,6 +74,11 @@ func (t *TestSuite) GetUserFollowers(id string) []*User {
 	return followers
 }
 
+func (t *TestSuite) GetFeedForUser(id string) []*Post {
+	// TODO Generate the User Feed
+	return []*Post{}
+}
+
 func (t *TestSuite) AddScore(postID, userID string, score int) {
 	t.Scores = append(t.Scores, &Score{UserID: userID, PostID: postID, Score: score})
 }
@@ -83,6 +89,7 @@ func (t *TestSuite) AddPost(name, path, userID string) *Post {
 		Name:      name,
 		PhotoPath: path,
 		UserID:    userID,
+		Time:      time.Now(),
 	}
 	t.Posts = append(t.Posts, newPost)
 	return newPost

@@ -50,3 +50,7 @@ func (d *Database) GetUserFollowing(id string) []*User {
 func (d *Database) GetUserFollowers(id string) []*User {
 	return nil
 }
+
+func (d *Database) GetFeedForUser(id string) []*Post {
+	return nil
+}

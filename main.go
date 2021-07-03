@@ -31,6 +31,12 @@ func main() {
 	r.HandleFunc("/follow", c.Follow).Methods("POST")
 	r.HandleFunc("/unfollow", c.Unfollow).Methods("POST")
 
+	r.HandleFunc("/user/{uuid}", c.GetUser) // Also look at creating users
+	r.HandleFunc("/user/{uuid}/following", c.GetUserFollowing)
+	r.HandleFunc("/user/{uuid}/followers", c.GetUserFollowers)
+
+	r.HandleFunc("/feed", c.GetUserFeed)
+
 	http.Handle("/", r)
 	http.ListenAndServe(":3000", r)
 

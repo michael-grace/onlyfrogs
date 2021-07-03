@@ -13,6 +13,7 @@ type Store interface {
 	GetUserByID(id string) (*User, error)
 	GetUserFollowing(id string) []*User
 	GetUserFollowers(id string) []*User
+	GetFeedForUser(id string) []*Post
 }
 
 var OnlyFrogsSession Store
