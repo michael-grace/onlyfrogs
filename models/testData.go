@@ -45,7 +45,7 @@ func (t *TestSuite) AddPost(name, path, userID string) *Post {
 }
 
 func SetUp() {
-	OnlyFrogsSession = &TestSuite{
+	NewOnlyFrogsSession(&TestSuite{
 		Users: []*User{
 			&User{
 				ID:       "1",
@@ -87,5 +87,5 @@ func SetUp() {
 				Score:  3,
 			},
 		},
-	}
+	})
 }
