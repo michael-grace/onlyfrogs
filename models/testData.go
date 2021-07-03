@@ -88,14 +88,21 @@ func (t *TestSuite) AddPost(name, path, userID string) *Post {
 	return newPost
 }
 
-func (t *TestSuite) Follow(followerID, followingID string) {
+func (t *TestSuite) Follow(followerID, followingID string) error {
+	if followerID == followingID {
+		return fmt.Errorf("you can't follow yourself")
+	}
 	t.FollowRecords = append(t.FollowRecords, FollowRecord{
 		FollowerID:  followerID,
 		FollowingID: followingID,
 	})
+	return nil
 }
 
-func (t *TestSuite) Unfollow(followerID, followingID string) {
+func (t *TestSuite) Unfollow(followerID, followingID string) error {
+	if followerID == followingID {
+		return fmt.Errorf("you can't unfollow yourself")
+	}
 	var recordIdx int = -1
 	for idx, val := range t.FollowRecords {
 		if val.FollowerID == followerID && val.FollowingID == followingID {
@@ -104,28 +111,29 @@ func (t *TestSuite) Unfollow(followerID, followingID string) {
 		}
 	}
 	t.FollowRecords = append(t.FollowRecords[:recordIdx], t.FollowRecords[recordIdx+1:]...)
+	return nil
 }
 
 func SetUp() {
 	NewOnlyFrogsSession(&TestSuite{
 		Users: []*User{
-			&User{
+			{
 				ID:       "1",
 				Username: "username1",
 			},
-			&User{
+			{
 				ID:       "2",
 				Username: "username2",
 			},
 		},
 		Posts: []*Post{
-			&Post{
+			{
 				ID:        "1",
 				Name:      "Frog One",
 				PhotoPath: "1.jpg",
 				UserID:    "1",
 			},
-			&Post{
+			{
 				ID:        "2",
 				Name:      "Frog Two",
 				PhotoPath: "2.jpg",
@@ -133,20 +141,26 @@ func SetUp() {
 			},
 		},
 		Scores: []*Score{
-			&Score{
+			{
 				UserID: "1",
 				PostID: "2",
 				Score:  4,
 			},
-			&Score{
+			{
 				UserID: "2",
 				PostID: "1",
 				Score:  -1,
 			},
-			&Score{
+			{
 				UserID: "1",
 				PostID: "1",
 				Score:  3,
+			},
+		},
+		FollowRecords: []FollowRecord{
+			{
+				FollowerID:  "1",
+				FollowingID: "2",
 			},
 		},
 	})

@@ -3,8 +3,8 @@ package models
 type Store interface {
 	AddScore(postID, userID string, score int)
 	AddPost(name, path, userID string) *Post
-	Follow(followerID, followingID string)
-	Unfollow(followerID, followingID string)
+	Follow(followerID, followingID string) error
+	Unfollow(followerID, followingID string) error
 
 	GetPosts() []*Post
 	GetPostFromID(id string) (*Post, error)

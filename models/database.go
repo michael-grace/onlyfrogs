@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 type Database struct {
 }
 
@@ -11,12 +13,18 @@ func (d *Database) AddPost(name, path, userID string) *Post {
 	return nil
 }
 
-func (d *Database) Follow(followerID, followingID string) {
-
+func (d *Database) Follow(followerID, followingID string) error {
+	if followerID == followingID {
+		return fmt.Errorf("you can't follow yourself")
+	}
+	return nil
 }
 
-func (d *Database) Unfollow(followerID, followingID string) {
-
+func (d *Database) Unfollow(followerID, followingID string) error {
+	if followerID == followingID {
+		return fmt.Errorf("you can't unfollow yourself")
+	}
+	return nil
 }
 
 func (d *Database) GetPosts() []*Post {
