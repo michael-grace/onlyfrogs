@@ -28,6 +28,9 @@ func main() {
 
 	r.HandleFunc("/score", c.AddScore).Methods("POST")
 
+	r.HandleFunc("/follow", c.Follow).Methods("POST")
+	r.HandleFunc("/unfollow", c.Unfollow).Methods("POST")
+
 	http.Handle("/", r)
 	http.ListenAndServe(":3000", r)
 

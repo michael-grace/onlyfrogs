@@ -7,9 +7,10 @@ import (
 )
 
 type TestSuite struct {
-	Users  []*User
-	Posts  []*Post
-	Scores []*Score
+	Users         []*User
+	Posts         []*Post
+	Scores        []*Score
+	FollowRecords []FollowRecord
 }
 
 func (t *TestSuite) GetScores() []*Score {
@@ -29,6 +30,19 @@ func (t *TestSuite) GetPostFromID(id string) (*Post, error) {
 	return nil, fmt.Errorf("Post with ID %v not found", id)
 }
 
+func (t *TestSuite) GetFollowRecords() []FollowRecord {
+	return t.FollowRecords
+}
+
+func (t *TestSuite) GetUserByID(id string) (*User, error) {
+	for _, user := range t.Users {
+		if user.ID == id {
+			return user, nil
+		}
+	}
+	return nil, fmt.Errorf("User with ID %v not found", id)
+}
+
 func (t *TestSuite) AddScore(postID, userID string, score int) {
 	t.Scores = append(t.Scores, &Score{UserID: userID, PostID: postID, Score: score})
 }
@@ -42,6 +56,24 @@ func (t *TestSuite) AddPost(name, path, userID string) *Post {
 	}
 	t.Posts = append(t.Posts, newPost)
 	return newPost
+}
+
+func (t *TestSuite) Follow(followerID, followingID string) {
+	t.FollowRecords = append(t.FollowRecords, FollowRecord{
+		FollowerID:  followerID,
+		FollowingID: followingID,
+	})
+}
+
+func (t *TestSuite) Unfollow(followerID, followingID string) {
+	var recordIdx int = -1
+	for idx, val := range t.FollowRecords {
+		if val.FollowerID == followerID && val.FollowingID == followingID {
+			recordIdx = idx
+			break
+		}
+	}
+	t.FollowRecords = append(t.FollowRecords[:recordIdx], t.FollowRecords[recordIdx+1:]...)
 }
 
 func SetUp() {
